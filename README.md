@@ -6,22 +6,44 @@
 [ci-img]:  https://travis-ci.org/MeoMix/postcss-inline-trait.svg
 [ci]:      https://travis-ci.org/MeoMix/postcss-inline-trait
 
+Converts:
 ```css
 .foo {
-    /* Input example */
+    /* .css file-ending is optional */
+    /* path is assumed to be ./common/css/traits/fancy.css */
+    trait: superFancy from 'fancy.css';
+}
+
+/* fancy.css */
+.superFancy {
+    background-color: 'pink';
 }
 ```
 
+into:
 ```css
 .foo {
-  /* Output example */
+  background-color: 'pink';
 }
 ```
 
 ## Usage
 
 ```js
-postcss([ require('postcss-inline-trait') ])
+var inlineTrait = require('postcss-inline-trait');
+postcss([inlineTrait({
+    getFileText: function(path){
+        // return environment-specific means of retrieving text at path such as Node's fs.readFile or SystemJS fetch
+        // e.g:
+        return System.normalize(path)
+            .then((normalizedPath) => {
+                return System.fetch({
+                    address: normalizedPath,
+                    metadata: {}
+                });
+            });
+    }
+})])
 ```
 
 See [PostCSS] docs for examples for your environment.
