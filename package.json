@@ -1,0 +1,32 @@
+{
+  "name": "postcss-inline-trait",
+  "version": "0.0.0",
+  "description": "PostCSS plugin which allows for inline declaration of CSS properties whose values will be imported from a traits directory.",
+  "keywords": [
+    "postcss",
+    "css",
+    "postcss-plugin",
+    "css modules"
+  ],
+  "author": "Sean Anderson <Sean.Palmer.Anderson@gmail.com>",
+  "license": "MIT",
+  "repository": "MeoMix/postcss-inline-trait",
+  "bugs": {
+    "url": "https://github.com/MeoMix/postcss-inline-trait/issues"
+  },
+  "homepage": "https://github.com/MeoMix/postcss-inline-trait",
+  "dependencies": {
+    "postcss": "^5.0.14"
+  },
+  "devDependencies": {
+    "ava": "^0.11.0",
+    "eslint": "^1.10.3",
+    "eslint-config-postcss": "^1.0.0"
+  },
+  "scripts": {
+    "test": "ava && eslint *.js"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-postcss/es5"
+  }
+}
