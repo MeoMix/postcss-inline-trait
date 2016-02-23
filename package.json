@@ -1,6 +1,6 @@
 {
   "name": "postcss-inline-trait",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "PostCSS plugin which allows for inline declaration of CSS properties whose values will be imported from a traits directory.",
   "keywords": [
     "postcss",
