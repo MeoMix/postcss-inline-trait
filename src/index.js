@@ -1,5 +1,5 @@
 import * as postcss from 'postcss';
-import { uniq, pluck, filter } from 'lodash';
+import { uniq, map, filter } from 'lodash';
 
 // This PostCSS plugin allows the inlining of traits.
 // It allows for the writing of CSS such as:
@@ -9,8 +9,9 @@ import { uniq, pluck, filter } from 'lodash';
 // The css file-ending is optional. Fancy is assumed to be located in a traits directory.
 // The values of fancyTrait will replace the trait declaration.
 class Trait {
-  constructor(getFileText) {
+  constructor(getFileText, traitPath) {
     this.plugin = this.plugin.bind(this);
+    this._traitPath = traitPath;
 
     if (getFileText) {
       this._getFileText = getFileText;
@@ -27,11 +28,11 @@ class Trait {
     });
 
     // Figure out which other files need to be imported.
-    const uniqueTraitPaths = uniq(pluck(traitDataList, 'traitPath'));
+    const uniqueTraitPaths = uniq(map(traitDataList, 'traitPath'));
 
     for (const traitPath of uniqueTraitPaths) {
       // Load the CSS file through whatever method was provided (i.e. SystemJS)
-      const promise = this._getFileText(traitPath)
+      const promise = this._getFileText(traitPath, css.source.input.from)
         .then((importedCssText) => {
           // Find all trait declarations which need information from the imported CSS file.
           const traitDataListForPath = filter(traitDataList, (traitData) => {
@@ -68,12 +69,8 @@ class Trait {
       throw new Error(`Trait ${decl.value} didn't match the form: "trait: foo from 'traitFile'"`);
     }
 
-    // TODO: Make traitPath generic
-    const isBundling = typeof window === 'undefined';
-    console.log('isBundling?', isBundling);
-    const rootDir = isBundling ? '/compiled/' : '/';
     const rawFileName = this._removeWrappingQuotes(regexpResult[2]);
-    let traitPath = `${rootDir}common/css/traits/${rawFileName}`;
+    let traitPath = `${this._traitPath}${rawFileName}`;
 
     // Assume CSS file if file extension is missing.
     if (!traitPath.includes('.css')) {
@@ -84,7 +81,7 @@ class Trait {
       traitNames: regexpResult[1].split(' '),
       traitPath,
       decl
-    }
+    };
   }
 
   _removeWrappingQuotes(string) {
@@ -119,5 +116,5 @@ class Trait {
 }
 
 export default postcss.plugin('trait', (options = {}) => {
-  return new Trait(options.getFileText).plugin;
-})
+  return new Trait(options.getFileText, options.traitPath).plugin;
+});
