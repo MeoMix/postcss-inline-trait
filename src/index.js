@@ -4,7 +4,7 @@ import { uniq, map, filter } from 'lodash';
 // This PostCSS plugin allows the inlining of traits.
 // It allows for the writing of CSS such as:
 // .foo {
-//   trait: fancyTrait from 'fancy[.css]'
+//   trait: fancyTrait from 'fancy[.trait]'
 // }
 // The css file-ending is optional. Fancy is assumed to be located in a traits directory.
 // The values of fancyTrait will replace the trait declaration.
@@ -72,9 +72,9 @@ class Trait {
     const rawFileName = this._removeWrappingQuotes(regexpResult[2]);
     let traitPath = `${this._traitPath}${rawFileName}`;
 
-    // Assume CSS file if file extension is missing.
-    if (!traitPath.includes('.css')) {
-      traitPath = `${traitPath}.css`;
+    // Assume trait file if file extension is missing.
+    if (!traitPath.includes('.trait')) {
+      traitPath = `${traitPath}.trait`;
     }
 
     return {

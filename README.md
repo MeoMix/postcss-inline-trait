@@ -10,8 +10,8 @@ Converts:
 ```css
 .foo {
     /* .css file-ending is optional */
-    /* path is assumed to be ./common/css/traits/fancy.css */
-    trait: superFancy from 'fancy.css';
+    /* path is assumed to be ./common/css/traits/fancy.trait */
+    trait: superFancy from 'fancy.trait';
 }
 
 /* fancy.css */
@@ -35,13 +35,7 @@ postcss([inlineTrait({
     getFileText: function(path){
         // return environment-specific means of retrieving text at path such as Node's fs.readFile or SystemJS fetch
         // e.g:
-        return System.normalize(path)
-            .then((normalizedPath) => {
-                return System.fetch({
-                    address: normalizedPath,
-                    metadata: {}
-                });
-            });
+        return System.normalize(path).then(System.import.bind(System));
     }
 })])
 ```
