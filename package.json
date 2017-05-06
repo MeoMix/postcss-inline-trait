@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/MeoMix/postcss-inline-trait",
   "dependencies": {
-    "postcss": "^5.0.14"
+    "postcss": "^6.0.0"
   },
   "devDependencies": {
     "ava": "^0.12.0",
